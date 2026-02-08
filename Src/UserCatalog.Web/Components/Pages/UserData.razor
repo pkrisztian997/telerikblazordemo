@@ -10,11 +10,14 @@
 <PageTitle>Users</PageTitle>
 
 @* <input placeholder="Search..." @bind="_searchTerm" @bind:event="oninput" /> *@
+<TelerikTextBox @bind-Value="_searchTerm"
+                Placeholder="Search..."
+                OnChange="@OnSearchTermChanged" />
 
 <TelerikGrid Data="@_filteredUsers" Height="500px"
              Pageable="true"
              Sortable="true"
-             FilterMode="Telerik.Blazor.GridFilterMode.FilterMenu"
+             FilterMode="Telerik.Blazor.GridFilterMode.None"
              SelectedItems="@_selectedUsers"
              SelectionMode="GridSelectionMode.Multiple"
              SelectedItemsChanged="@((IEnumerable<IUser> newSelected) => OnRowSelect(newSelected))">
@@ -42,15 +45,7 @@
 
 @code {
     private IEnumerable<IUser> _users = new List<IUser>();
-    private IEnumerable<IUser> _filteredUsers => string.IsNullOrWhiteSpace(_searchTerm) || _searchTerm.Length < 3
-        ? _users
-        : _users.Where(u =>
-            u.Username.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            u.FirstName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            u.LastName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            u.BirthPlace.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
-            u.Residence.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+    private IEnumerable<IUser> _filteredUsers = new List<IUser>();
 
     private string _searchTerm = string.Empty;
     private IEnumerable<IUser> _selectedUsers = new List<IUser>();
@@ -58,6 +53,7 @@
     protected override async Task OnInitializedAsync()
     {
         _users = await LoadUsersAsync();
+        _filteredUsers = _users;
     }
 
     private async Task<IEnumerable<IUser>> LoadUsersAsync()
@@ -98,9 +94,21 @@
 
     private void ExportToXml()
     {
-        var serializer = new XmlSerializer(typeof(List<User>));
+        var proxyList = _selectedUsers.Select(u => new UserProxy
+        {
+            Id = u.Id,
+            Username = u.Username,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+            DateOfBirth = u.DateOfBirth,
+            BirthPlace = u.BirthPlace,
+            Residence = u.Residence,
+            Password = u.Password
+        }).ToList();
+
+        var serializer = new XmlSerializer(typeof(List<UserProxy>));
         using var sw = new StringWriter();
-        serializer.Serialize(sw, _selectedUsers);
+        serializer.Serialize(sw, proxyList);
         var xml = sw.ToString();
 
         var bytes = Encoding.UTF8.GetBytes(xml);
@@ -116,7 +124,20 @@
         Nav.NavigateTo($"/userdetail/{userId}");
     }
 
-    private class UserProxy : IUser
+    private void OnSearchTermChanged(object currentValue)
+    {
+        _filteredUsers = string.IsNullOrWhiteSpace(_searchTerm) || _searchTerm.Length < 3
+            ? _users
+            : _users.Where(u =>
+                u.Username.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.FirstName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.LastName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.BirthPlace.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                u.Residence.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+    }
+
+    public class UserProxy : IUser
     {
         public Guid Id { get; set; }
         public string Username { get; set; } = string.Empty;
