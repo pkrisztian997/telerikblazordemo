@@ -13,15 +13,18 @@ namespace UserCatalog.Web.Controllers
     {
         private readonly IGetAllUsersQuery _getAllUsersQuery;
         private readonly IGetAuthenticatedUserQuery _getAuthenticatedUserQuery;
+        private readonly IGetUserDetailsQuery _getUserDetailsQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserController(
             IGetAllUsersQuery getAllUsersQuery,
             IGetAuthenticatedUserQuery getAuthenticatedUserQuery,
+            IGetUserDetailsQuery getUserDetailsQuery,
             IHttpContextAccessor httpContextAccessor)
         {
             _getAllUsersQuery = getAllUsersQuery ?? throw new ArgumentNullException(nameof(getAllUsersQuery));
             _getAuthenticatedUserQuery = getAuthenticatedUserQuery;
+            _getUserDetailsQuery = getUserDetailsQuery ?? throw new ArgumentNullException(nameof(getUserDetailsQuery));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
@@ -29,6 +32,12 @@ namespace UserCatalog.Web.Controllers
         public async Task<IEnumerable<IUser>> Users()
         {
             return await _getAllUsersQuery.GetAllUsersAsync();
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IUser> GetUsersById(Guid userId)
+        {
+            return await _getUserDetailsQuery.GetUserDetailsAsync(userId);
         }
 
         [HttpPost("login")]

@@ -158,5 +158,11 @@ namespace SHD.UserCatalog.BL.DataAccess
                 }
             }
         }
+
+        public async Task<IUser> GetUserDetailsAsync(Guid userId)
+        {
+            var allUsers = await GetAllUsersAsync();
+            return allUsers.FirstOrDefault(u => u.Id == userId) ?? throw new InvalidOperationException($"User with id {userId} not found.");
+        }
     }
 }

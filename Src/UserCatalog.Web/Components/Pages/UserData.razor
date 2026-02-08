@@ -3,9 +3,13 @@
 @using System.Text
 @using SHD.UserCatalog.BL
 @using System.Security
+@using System.Text.Json
+@using UserCatalog.Web.Components.Pages.ViewModels
+@using UserCatalog.Web.Components.Pages.ViewModels.Converters
 @inject HttpClient Http
 @inject NavigationManager Nav
 @inject IJSRuntime JS
+@inject UserProxyConverter UserProxyConverter
 
 <PageTitle>Users</PageTitle>
 
@@ -33,12 +37,12 @@
 <div class="mt-3">
     <TelerikButton Class="btn btn-primary" OnClick="@ExportToXml"
                    Enabled="@(_selectedUsers.Any())">
-        XML Mentés
+        Save to XML
     </TelerikButton>
 
     <TelerikButton Class="btn btn-success" OnClick="@GoToDetail"
-                   Enabled="@(_selectedUsers.Any())">
-        Módosítás
+                   Enabled="@(_selectedUsers.Count() == 1)">
+        Edit
     </TelerikButton>
 </div>
 
@@ -64,26 +68,7 @@
         }
 
         var json = await response.Content.ReadAsStringAsync();
-
-        var doc = System.Text.Json.JsonDocument.Parse(json);
-        var list = new List<IUser>();
-
-        foreach (var element in doc.RootElement.EnumerateArray())
-        {
-            list.Add(new UserProxy()
-            {
-                Id = element.GetProperty("id").GetGuid(),
-                Username = element.GetProperty("username").GetString()!,
-                FirstName = element.GetProperty("firstName").GetString()!,
-                LastName = element.GetProperty("lastName").GetString()!,
-                DateOfBirth = element.GetProperty("dateOfBirth").GetDateTime(),
-                BirthPlace = element.GetProperty("birthPlace").GetString()!,
-                Residence = element.GetProperty("residence").GetString()!,
-                Password = new System.Security.SecureString()
-            });
-        }
-
-        return list;
+        return UserProxyConverter.ConvertUserListToUserProxy(json);
     }
 
     private void OnRowSelect(IEnumerable<IUser> users)
@@ -134,17 +119,5 @@
                 u.BirthPlace.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase) ||
                 u.Residence.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase))
                 .ToList();
-    }
-
-    public class UserProxy : IUser
-    {
-        public Guid Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public DateTime DateOfBirth { get; set; }
-        public string BirthPlace { get; set; } = string.Empty;
-        public string Residence { get; set; } = string.Empty;
-        public SecureString Password { get; set; } = new SecureString();
     }
 }

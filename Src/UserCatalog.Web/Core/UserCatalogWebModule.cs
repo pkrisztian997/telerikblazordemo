@@ -1,4 +1,5 @@
 ﻿using SHD.UserCatalog.BL.Core;
+using UserCatalog.Web.Components.Pages.ViewModels.Converters;
 
 namespace UserCatalog.Web.Core
 {
@@ -9,6 +10,8 @@ namespace UserCatalog.Web.Core
             ArgumentNullException.ThrowIfNull(dataFilePath);
 
             services.AddUserCatalogModule(dataFilePath);
+
+            services.AddTransient<UserProxyConverter>();
 
             return services;
         }
