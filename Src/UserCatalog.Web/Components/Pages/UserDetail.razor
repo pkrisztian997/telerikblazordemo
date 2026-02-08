@@ -55,7 +55,7 @@
     </div>
 
     <TelerikMaskedTextBox @bind-Value="_formModel.PhoneNumber"
-                          Mask="(000) 000-0000"
+                          Mask="+00 00 000-0000"
                           Placeholder="Enter phone number" />
 
     <div class="mb-2">
@@ -129,6 +129,7 @@
         _formModel.DateOfBirth = user.DateOfBirth;
         _formModel.BirthPlace = user.BirthPlace;
         _formModel.Residence = user.Residence;
+        _formModel.PhoneNumber = user.PhoneNumber;
     }
 
     private async Task OnValidSubmitHandler()

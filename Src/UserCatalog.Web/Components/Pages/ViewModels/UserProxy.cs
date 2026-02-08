@@ -1,8 +1,11 @@
 ﻿using SHD.UserCatalog.BL;
 using System.Security;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace UserCatalog.Web.Components.Pages.ViewModels
 {
+    [Serializable]
     public class UserProxy : IUser
     {
         public Guid Id { get; set; }
@@ -12,7 +15,9 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
         public DateTime DateOfBirth { get; set; }
         public string BirthPlace { get; set; } = string.Empty;
         public string Residence { get; set; } = string.Empty;
+        [XmlIgnore]
         public SecureString Password { get; set; } = new SecureString();
+        [XmlIgnore]
         public string PlainPassword { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
 
