@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SHD.UserCatalog.BL;
 using SHD.UserCatalog.BL.Workflow.Queries;
 using System.Security.Claims;
+using UserCatalog.Web.Components.Pages.ViewModels;
 
 namespace UserCatalog.Web.Controllers
 {
@@ -38,6 +39,13 @@ namespace UserCatalog.Web.Controllers
         public async Task<IUser> GetUsersById(Guid userId)
         {
             return await _getUserDetailsQuery.GetUserDetailsAsync(userId);
+        }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserDetailFormModel userDetailFormModel)
+        {
+            
+            return Ok();
         }
 
         [HttpPost("login")]
@@ -84,12 +92,6 @@ namespace UserCatalog.Web.Controllers
         {
             await HttpContext.SignOutAsync("cookie");
             return Ok();
-        }
-
-        public sealed class LoginRequest
-        {
-            public string? Username { get; set; }
-            public string? Password { get; set; }
         }
     }
 }

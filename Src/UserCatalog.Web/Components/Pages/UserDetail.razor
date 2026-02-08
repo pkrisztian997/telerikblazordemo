@@ -85,6 +85,7 @@
         var json = await response.Content.ReadAsStringAsync();
         var user = (UserProxy)UserProxyConverter.ConvertUserToUserProxy(json);
 
+        _formModel.Id = user.Id;
         _formModel.Username = user.Username;
         _formModel.FirstName = user.FirstName;
         _formModel.LastName = user.LastName;
@@ -93,43 +94,12 @@
         _formModel.Residence = user.Residence;
     }
 
-    private void OnValidSubmitHandler()
+    private async Task OnValidSubmitHandler()
     {
-        Console.WriteLine("VALID FORM");
-    }
-
-
-    private class UserDetailFormModel
-    {
-        public Guid Id { get; set; }
-
-        [Required]
-        public string Username { get; set; } = string.Empty;
-
-        [Required]
-        public string FirstName { get; set; } = string.Empty;
-
-        [Required]
-        public string LastName { get; set; } = string.Empty;
-
-        [Required]
-        public DateTime DateOfBirth { get; set; }
-
-        [Required]
-        public string BirthPlace { get; set; } = string.Empty;
-
-        [Required]
-        public string Residence { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Current password is required")]
-        public string CurrentPassword { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "New password is required")]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
-        public string NewPassword { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Please repeat the new password")]
-        [Compare(nameof(NewPassword), ErrorMessage = "The new passwords do not match")]
-        public string NewPasswordAgain { get; set; } = string.Empty;
+        var response = await Http.PostAsJsonAsync($"/api/user/update", _formModel);
+        if (!response.IsSuccessStatusCode)
+        {
+            return;
+        }
     }
 }
