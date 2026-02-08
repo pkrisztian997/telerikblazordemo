@@ -35,9 +35,14 @@
 </TelerikGrid>
 
 <div class="mt-3">
-    <TelerikButton Class="btn btn-primary" OnClick="@ExportToXml"
+    <TelerikButton Class="btn btn-primary" OnClick="@ExportSelectedToXml"
                    Enabled="@(_selectedUsers.Any())">
-        Save to XML
+        Save selected to XML
+    </TelerikButton>
+
+    <TelerikButton Class="btn btn-primary" OnClick="@ExportAllToXml"
+                   Enabled="@(_users.Any())">
+        Save all to XML
     </TelerikButton>
 
     <TelerikButton Class="btn btn-success" OnClick="@GoToDetail"
@@ -76,9 +81,19 @@
         _selectedUsers = users;
     }
 
-    private void ExportToXml()
+    private void ExportSelectedToXml()
     {
-        var proxyList = _selectedUsers.Select(u => new UserProxy
+        ExportSelectedToXml(_selectedUsers);
+    }
+
+    private void ExportAllToXml()
+    {
+        ExportSelectedToXml(_users);
+    }
+
+    private void ExportSelectedToXml(IEnumerable<IUser> users)
+    {
+        var proxyList = users.Select(u => new UserProxy
         (
             u.Id,
             u.Username,

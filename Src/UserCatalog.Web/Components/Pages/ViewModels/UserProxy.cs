@@ -67,5 +67,10 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
             securePwd.MakeReadOnly();
             return securePwd;
         }
+
+        // For serialiaztion purposes
+        public UserProxy()
+        {
+        }
     }
 }
