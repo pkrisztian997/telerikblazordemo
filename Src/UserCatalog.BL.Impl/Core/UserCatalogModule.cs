@@ -26,6 +26,7 @@ namespace SHD.UserCatalog.BL.Core
         private static void AddQueries(IServiceCollection services)
         {
             services.AddTransient<IGetAllUsersQuery, GetAllUsersQuery>();
+            services.AddTransient<IGetAuthenticatedUserQuery, GetAuthenticatedUserQuery>();
         }
 
         private static void AddRepositories(IServiceCollection services, string dataFilePath)

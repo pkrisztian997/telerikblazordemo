@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.InteropServices;
 using System.Security;
 
 namespace SHD.UserCatalog.BL.DataAccess
@@ -96,6 +97,66 @@ namespace SHD.UserCatalog.BL.DataAccess
             }
             securePwd.MakeReadOnly();
             return securePwd;
+        }
+
+        public async Task<IUser?> GetAuthenticatedUserAsync(string username, string password)
+        {
+            var allUsers = await GetAllUsersAsync();
+            var user = allUsers.FirstOrDefault(u => u.Username.Equals(username, StringComparison.Ordinal));
+
+            if (user != null && AreSecureStringsEqual(user.Password, ExtractPassword(password)))
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+        private static bool AreSecureStringsEqual(SecureString password, SecureString securedInputPassword)
+        {
+            if (password == null || securedInputPassword == null)
+            {
+                return false;
+            }
+
+            if (password.Length != securedInputPassword.Length)
+            {
+                return false;
+            }
+
+            var bstr1 = IntPtr.Zero;
+            var bstr2 = IntPtr.Zero;
+
+            try
+            {
+                bstr1 = Marshal.SecureStringToBSTR(password);
+                bstr2 = Marshal.SecureStringToBSTR(securedInputPassword);
+
+                for (int i = 0; i < password.Length; i++)
+                {
+                    char char1 = (char)Marshal.ReadInt16(bstr1, i * 2);
+                    char char2 = (char)Marshal.ReadInt16(bstr2, i * 2);
+
+                    if (char1 != char2)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            finally
+            {
+                if (bstr1 != IntPtr.Zero)
+                {
+                    Marshal.ZeroFreeBSTR(bstr1);
+                }
+
+                if (bstr2 != IntPtr.Zero)
+                {
+                    Marshal.ZeroFreeBSTR(bstr2);
+                }
+            }
         }
     }
 }

@@ -60,6 +60,10 @@
             var result = await module.InvokeAsync<string>("postJson", "/api/user/login", dto);
             Nav.NavigateTo("/", forceLoad: true);
         }
+        catch (JSException ex)
+        {
+            // TODO: handle validation message
+        }
         finally
         {
             if (module is not null)

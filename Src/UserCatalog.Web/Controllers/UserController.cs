@@ -12,11 +12,16 @@ namespace UserCatalog.Web.Controllers
     public class UserController : Controller
     {
         private readonly IGetAllUsersQuery _getAllUsersQuery;
+        private readonly IGetAuthenticatedUserQuery _getAuthenticatedUserQuery;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserController(IGetAllUsersQuery getAllUsersQuery, IHttpContextAccessor httpContextAccessor)
+        public UserController(
+            IGetAllUsersQuery getAllUsersQuery,
+            IGetAuthenticatedUserQuery getAuthenticatedUserQuery,
+            IHttpContextAccessor httpContextAccessor)
         {
             _getAllUsersQuery = getAllUsersQuery ?? throw new ArgumentNullException(nameof(getAllUsersQuery));
+            _getAuthenticatedUserQuery = getAuthenticatedUserQuery;
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
@@ -29,11 +34,27 @@ namespace UserCatalog.Web.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> Login([FromForm] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.Username))
+            {
+                return BadRequest("Username is required.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest("Password is required.");
+            }
+
+            var authenticatedUser = await _getAuthenticatedUserQuery.GetAuthenticatedUserAsync(request.Username, request.Password);
+            if (authenticatedUser == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
             var claims = new List<Claim>()
             {
-                new Claim("usr", request?.Username ?? string.Empty)
+                new Claim("usr", request.Username)
             };
             var identity = new ClaimsIdentity(claims, "cookie");
             var user = new ClaimsPrincipal(identity);
