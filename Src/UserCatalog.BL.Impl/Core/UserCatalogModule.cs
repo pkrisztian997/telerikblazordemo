@@ -1,0 +1,36 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using SHD.UserCatalog.BL.DataAccess;
+using SHD.UserCatalog.BL.Workflow.Queries;
+
+namespace SHD.UserCatalog.BL.Core
+{
+    public static class UserCatalogModule
+    {
+        public static IServiceCollection AddUserCatalogModule(this IServiceCollection services, string dataFilePath)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(dataFilePath);
+
+            AddCommands(services);
+            AddQueries(services);
+
+            AddRepositories(services, dataFilePath);
+
+            return services;
+        }
+
+        private static void AddCommands(IServiceCollection services)
+        {
+
+        }
+
+        private static void AddQueries(IServiceCollection services)
+        {
+            services.AddTransient<IGetAllUsersQuery, GetAllUsersQuery>();
+        }
+
+        private static void AddRepositories(IServiceCollection services, string dataFilePath)
+        {
+            services.AddTransient<IUserRepository>(u => new UserRepository(dataFilePath));
+        }
+    }
+}

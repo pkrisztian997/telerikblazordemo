@@ -18,6 +18,16 @@
 	  <ProjectReference Include="..\UserCatalog.BL\UserCatalog.BL.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Resources\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\UserDatabase.txt">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>..\..\Binaries\Debug</OutputPath>
 	</PropertyGroup>

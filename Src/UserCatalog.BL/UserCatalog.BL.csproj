@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Workflow\Commands\" />
-	  <Folder Include="Workflow\Queries\" />
 	</ItemGroup>
 
 	<ItemGroup>

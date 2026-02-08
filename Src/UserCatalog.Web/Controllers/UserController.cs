@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SHD.UserCatalog.BL;
+using SHD.UserCatalog.BL.Workflow.Queries;
 
 namespace UserCatalog.Web.Controllers
 {
@@ -7,18 +8,17 @@ namespace UserCatalog.Web.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        [HttpGet("users")]
-        public IEnumerable<IUser> Users()
+        private readonly IGetAllUsersQuery _getAllUsersQuery;
+
+        public UserController(IGetAllUsersQuery getAllUsersQuery)
         {
+            _getAllUsersQuery = getAllUsersQuery ?? throw new ArgumentNullException(nameof(getAllUsersQuery));
+        }
 
-
-            //return Enumerable.Range(1, 15).Select(index => new WeatherDto
-            //{
-            //    Date = startDate.AddDays(index),
-            //    TemperatureC = Random.Shared.Next(-20, 55),
-            //    Summary = summaries[Random.Shared.Next(summaries.Length)]
-            //});
-            return Enumerable.Empty<IUser>();
+        [HttpGet]
+        public async Task<IEnumerable<IUser>> Users()
+        {
+            return await _getAllUsersQuery.GetAllUsersAsync();
         }
     }
 }

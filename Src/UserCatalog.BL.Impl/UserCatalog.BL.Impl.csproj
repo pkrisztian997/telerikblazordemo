@@ -19,6 +19,10 @@
 	  <ProjectReference Include="..\UserCatalog.BL\UserCatalog.BL.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Workflow\Commands\" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>..\..\Binaries\Debug</OutputPath>
 	</PropertyGroup>

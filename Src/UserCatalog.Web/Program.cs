@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Components;
 using UserCatalog.Web.Components;
+using UserCatalog.Web.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 AddTelerikBlazor(builder);
 AddControllerSupport(builder);
+builder.Services.AddUserCatalogWebModule(@".\Resources\UserDatabase.txt");
 
 var app = builder.Build();
 MapControllers(app);
