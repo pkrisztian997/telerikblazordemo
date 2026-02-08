@@ -32,6 +32,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels.Converters
                 element.GetProperty("dateOfBirth").GetDateTime(),
                 element.GetProperty("birthPlace").GetString()!,
                 element.GetProperty("residence").GetString()!,
+                element.GetProperty("phoneNumber").GetString()!,
                 new SecureString());
 
             return user;
@@ -47,6 +48,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels.Converters
                 userDetailFormModel.DateOfBirth,
                 userDetailFormModel.BirthPlace,
                 userDetailFormModel.Residence,
+                userDetailFormModel.PhoneNumber,
                 userDetailFormModel.NewPassword
                 );
 

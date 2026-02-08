@@ -14,6 +14,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
         public string Residence { get; set; } = string.Empty;
         public SecureString Password { get; set; } = new SecureString();
         public string PlainPassword { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
 
         public UserProxy(
             Guid id, 
@@ -23,6 +24,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
             DateTime dateOfBirth, 
             string birthPlace, 
             string residence, 
+            string phoneNumber,
             SecureString password)
         {
             Id = id;
@@ -32,6 +34,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
             DateOfBirth = dateOfBirth;
             BirthPlace = birthPlace ?? throw new ArgumentNullException(nameof(birthPlace));
             Residence = residence ?? throw new ArgumentNullException(nameof(residence));
+            PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
             Password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
@@ -43,6 +46,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
             DateTime dateOfBirth,
             string birthPlace,
             string residence,
+            string phoneNumber,
             string plainPassword)
         {
             _ = string.IsNullOrWhiteSpace(plainPassword) ? throw new ArgumentException("Plain password cannot be null or whitespace.", nameof(plainPassword)) : string.Empty;
@@ -54,6 +58,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
             DateOfBirth = dateOfBirth;
             BirthPlace = birthPlace ?? throw new ArgumentNullException(nameof(birthPlace));
             Residence = residence ?? throw new ArgumentNullException(nameof(residence));
+            PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
             Password = ConvertPasswordToSecureString(plainPassword);
         }
 

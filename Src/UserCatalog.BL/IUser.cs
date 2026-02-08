@@ -12,5 +12,6 @@ namespace SHD.UserCatalog.BL
         DateTime DateOfBirth { get; }
         string BirthPlace { get; }
         string Residence { get; }
+        string PhoneNumber { get; }
     }
 }

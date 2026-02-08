@@ -6,8 +6,8 @@ namespace SHD.UserCatalog.BL.DataAccess
 {
     internal class UserRepository : IUserRepository
     {
-        private const int EXPECTED_NUMBER_OF_RECORDS = 8;
-        private const string HEADER_LINE = "Id;Username;Password;LastName;FirstName;DateOfBirth;BirthPlace;Residence";
+        private const int EXPECTED_NUMBER_OF_RECORDS = 9;
+        private const string HEADER_LINE = "Id;Username;Password;LastName;FirstName;DateOfBirth;BirthPlace;Residence;PhoneNumber";
         private readonly string _dataFilePath;
 
         public UserRepository(string dataFilePath)
@@ -70,10 +70,11 @@ namespace SHD.UserCatalog.BL.DataAccess
             var dobText = parts[5].Trim();
             var birthPlace = parts[6].Trim();
             var residence = parts[7].Trim();
+            var phoneNumber = parts[8].Trim();
             DateTime dateOfBirth = ExtractDateOfBirth(dobText);
             SecureString securePwd = ExtractPassword(passwordPlain);
 
-            users.Add(new User(id, username, securePwd, firstName, lastName, dateOfBirth, birthPlace, residence));
+            users.Add(new User(id, username, securePwd, firstName, lastName, dateOfBirth, birthPlace, residence, phoneNumber));
         }
 
         private static DateTime ExtractDateOfBirth(string dobText)
@@ -228,11 +229,12 @@ namespace SHD.UserCatalog.BL.DataAccess
         public static string GetAbsolutePath(string relativePath)
         {
             if (string.IsNullOrWhiteSpace(relativePath))
+            {
                 throw new ArgumentException("Path cannot be null or empty.", nameof(relativePath));
+            }
 
             return Path.GetFullPath(relativePath);
         }
-
 
         private static string BuildLine(IUser user)
         {
@@ -244,7 +246,8 @@ namespace SHD.UserCatalog.BL.DataAccess
                 user.FirstName,
                 user.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 user.BirthPlace,
-                user.Residence
+                user.Residence,
+                user.PhoneNumber
             );
         }
 

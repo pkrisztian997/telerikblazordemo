@@ -24,6 +24,8 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
         [Required]
         public string Residence { get; set; } = string.Empty;
 
+        public string PhoneNumber { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Current password is required")]
         public string CurrentPassword { get; set; } = string.Empty;
 

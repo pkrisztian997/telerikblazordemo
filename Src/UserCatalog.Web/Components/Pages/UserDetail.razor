@@ -38,7 +38,7 @@
     <div class="mb-2">
         <label>Birth Place</label>
         <TelerikDropDownList @bind-Value="_formModel.BirthPlace"
-                             Data="@_birthPlaces"
+                             Data="@_places"
                              TextField="Name"
                              ValueField="Name"
                              Width="250px" />
@@ -47,8 +47,16 @@
 
     <div class="mb-2">
         <label>Residence</label>
-        <TelerikTextBox @bind-Value="_formModel.Residence" />
+        <TelerikDropDownList @bind-Value="_formModel.Residence"
+                             Data="@_places"
+                             TextField="Name"
+                             ValueField="Name"
+                             Width="250px" />
     </div>
+
+    <TelerikMaskedTextBox @bind-Value="_formModel.PhoneNumber"
+                          Mask="(000) 000-0000"
+                          Placeholder="Enter phone number" />
 
     <div class="mb-2">
         <label>Current Password</label>
@@ -80,7 +88,7 @@
     [Parameter]
     public Guid UserId { get; set; }
 
-    private List<PlaceOption> _birthPlaces = new()
+    private List<PlaceOption> _places = new()
     {
         new PlaceOption { Name = "Budapest" },
         new PlaceOption { Name = "Debrecen" },

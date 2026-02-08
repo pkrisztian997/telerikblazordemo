@@ -12,8 +12,18 @@ namespace SHD.UserCatalog.BL
         public DateTime DateOfBirth { get; }
         public string BirthPlace { get; }
         public string Residence { get; }
+        public string PhoneNumber { get; }
 
-        public User(Guid id, string username, SecureString password, string firstName, string lastName, DateTime dateOfBirth, string birthPlace, string residence)
+        public User(
+            Guid id,
+            string username,
+            SecureString password,
+            string firstName,
+            string lastName,
+            DateTime dateOfBirth,
+            string birthPlace,
+            string residence,
+            string phoneNumber)
         {
             Id = id;
             Username = username;
@@ -23,11 +33,12 @@ namespace SHD.UserCatalog.BL
             DateOfBirth = dateOfBirth;
             BirthPlace = birthPlace;
             Residence = residence;
+            PhoneNumber = phoneNumber;
         }
 
         override public string ToString()
         {
-            return $"Id: {Id}, Username: {Username}, FirstName: {FirstName}, LastName: {LastName}, DateOfBirth: {DateOfBirth}, BirthPlace: {BirthPlace}, Residence: {Residence}";
+            return $"Id: {Id}, Username: {Username}, FirstName: {FirstName}, LastName: {LastName}, DateOfBirth: {DateOfBirth}, BirthPlace: {BirthPlace}, Residence: {Residence}, Phone number: {PhoneNumber ?? string.Empty}";
         }
     }
 }
