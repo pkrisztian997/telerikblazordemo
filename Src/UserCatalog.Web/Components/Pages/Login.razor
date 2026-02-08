@@ -5,35 +5,37 @@
 
 <PageTitle>Login</PageTitle>
 
-<div class="k-flex k-justify-content-center k-align-items-center" style="height:100vh;">
-    <div class="k-card" style="min-width:320px; max-width:420px; width:100%;">
-        <div class="k-card-header">
+<TelerikStackLayout Orientation="StackLayoutOrientation.Vertical" Class="k-flex k-justify-content-center k-align-items-center">
+    <TelerikCard>
+        <CardHeader>
             <h3 style="margin:0;">Login</h3>
-        </div>
-        <div class="k-card-body" style="padding:1.25rem;">
-            <EditForm EditContext="@_editContext" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+        </CardHeader>
+        <CardBody>
+            <div style="padding:1.25rem;">
+                <EditForm EditContext="@_editContext" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <TelerikTextBox @bind-Value="_model.Username" Placeholder="Enter Username" />
-                    <ValidationMessage For="@(() => _model.Username)" />
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <TelerikTextBox @bind-Value="_model.Username" Placeholder="Enter Username" />
+                        <ValidationMessage For="@(() => _model.Username)" />
+                    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <TelerikTextBox @bind-Value="_model.Password" Placeholder="Enter Password" Password="true" />
-                    <ValidationMessage For="@(() => _model.Password)" />
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <TelerikTextBox @bind-Value="_model.Password" Placeholder="Enter Password" Password="true" />
+                        <ValidationMessage For="@(() => _model.Password)" />
+                    </div>
 
-                <div class="k-form-buttons">
-                    <TelerikButton ButtonType="ButtonType.Submit" Class="k-primary">Login</TelerikButton>
-                </div>
-            </EditForm>
-        </div>
-    </div>
-</div>
+                    <div class="k-form-buttons">
+                        <TelerikButton ButtonType="ButtonType.Submit" Class="k-primary">Login</TelerikButton>
+                    </div>
+                </EditForm>
+            </div>
+        </CardBody>
+    </TelerikCard>
+</TelerikStackLayout>
 
 @code {
     private LoginModel _model = new();
