@@ -19,11 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Resources\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="Resources\UserDatabase.txt">
+	  <None Update="Resources\UserDatabase.csv">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>

@@ -11,7 +11,7 @@ builder.Services.AddScoped(sp =>
     var navigation = sp.GetRequiredService<NavigationManager>();
     return new HttpClient { BaseAddress = new Uri(navigation.BaseUri) };
 });
-builder.Services.AddUserCatalogWebModule(@".\Resources\UserDatabase.txt");
+builder.Services.AddUserCatalogWebModule(@".\Resources\UserDatabase.csv");
 
 builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie");
