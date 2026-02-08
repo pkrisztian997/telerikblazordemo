@@ -9,14 +9,7 @@
     protected override async Task OnInitializedAsync()
     {
         await Http.PostAsync("/api/user/logout", null);
-        
-        await JS.InvokeVoidAsync("eval", @"
-            document.cookie.split(';').forEach(function(c) {
-                document.cookie = c.replace(/^ +/, '')
-                                   .replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
-            });
-        ");
-
+        await JS.InvokeVoidAsync("cookieManager.deleteAllCookies");
         Nav.NavigateTo("/login", forceLoad: true);
     }
 }

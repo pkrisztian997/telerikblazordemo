@@ -29,7 +29,7 @@ namespace UserCatalog.Web.Controllers
         [HttpPost("login")]
         [AllowAnonymous]
         [IgnoreAntiforgeryToken]
-        public async Task<string> Login([FromForm] LoginRequest request)
+        public async Task<IActionResult> Login([FromForm] LoginRequest request)
         {
             var claims = new List<Claim>()
             {
@@ -46,7 +46,7 @@ namespace UserCatalog.Web.Controllers
 
             await httpContext.SignInAsync("cookie", user);
 
-            return "ok";
+            return Ok();
         }
 
         [HttpPost("logout")]
