@@ -13,6 +13,11 @@
 		<PackageReference Include="Telerik.UI.for.Blazor" Version="12.3.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\UserCatalog.BL.Impl\UserCatalog.BL.Impl.csproj" />
+	  <ProjectReference Include="..\UserCatalog.BL\UserCatalog.BL.csproj" />
+	</ItemGroup>
+
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<OutputPath>..\..\Binaries\Debug</OutputPath>
 	</PropertyGroup>

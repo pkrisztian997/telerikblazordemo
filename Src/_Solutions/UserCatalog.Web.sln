@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCatalog.BL", "..\UserCa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserCatalog.BL.Impl", "..\UserCatalog.BL.Impl\UserCatalog.BL.Impl.csproj", "{C4793FB8-C25B-6642-F60D-ACC6B5C7E1BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganizationalFramework.BL", "..\OrganizationalFramework.BL\OrganizationalFramework.BL.csproj", "{B6C1F8A8-FD59-8797-A404-B083B9BBC00C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrganizationalFramework.BL.Impl", "..\OrganizationalFramework.BL.Impl\OrganizationalFramework.BL.Impl.csproj", "{ACD6577D-05EB-45E8-A78B-5CC2FCE8CA7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{C4793FB8-C25B-6642-F60D-ACC6B5C7E1BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4793FB8-C25B-6642-F60D-ACC6B5C7E1BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4793FB8-C25B-6642-F60D-ACC6B5C7E1BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6C1F8A8-FD59-8797-A404-B083B9BBC00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6C1F8A8-FD59-8797-A404-B083B9BBC00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6C1F8A8-FD59-8797-A404-B083B9BBC00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6C1F8A8-FD59-8797-A404-B083B9BBC00C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACD6577D-05EB-45E8-A78B-5CC2FCE8CA7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACD6577D-05EB-45E8-A78B-5CC2FCE8CA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACD6577D-05EB-45E8-A78B-5CC2FCE8CA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACD6577D-05EB-45E8-A78B-5CC2FCE8CA7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
