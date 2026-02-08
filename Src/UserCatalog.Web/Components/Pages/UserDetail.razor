@@ -30,12 +30,19 @@
     <div class="mb-2">
         <label>Date of Birth</label>
         <TelerikDatePicker @bind-Value="_formModel.DateOfBirth"
-                           Format="yyyy-MM-dd" />
+                           Format="yyyy-MM-dd"
+                           Max="@DateTime.UtcNow"
+                           Width="250px" />
     </div>
 
     <div class="mb-2">
         <label>Birth Place</label>
-        <TelerikTextBox @bind-Value="_formModel.BirthPlace" />
+        <TelerikDropDownList @bind-Value="_formModel.BirthPlace"
+                             Data="@_birthPlaces"
+                             TextField="Name"
+                             ValueField="Name"
+                             Width="250px" />
+        <ValidationMessage For="@(() => _formModel.BirthPlace)" />
     </div>
 
     <div class="mb-2">
@@ -72,6 +79,27 @@
 @code {
     [Parameter]
     public Guid UserId { get; set; }
+
+    private List<PlaceOption> _birthPlaces = new()
+    {
+        new PlaceOption { Name = "Budapest" },
+        new PlaceOption { Name = "Debrecen" },
+        new PlaceOption { Name = "Szeged" },
+        new PlaceOption { Name = "Pécs" },
+        new PlaceOption { Name = "Győr" },
+        new PlaceOption { Name = "Eger" },
+        new PlaceOption { Name = "Veszprém" },
+        new PlaceOption { Name = "Székesfehérvár" },
+        new PlaceOption { Name = "Szentendre" },
+        new PlaceOption { Name = "Zalaegerszeg" },
+        new PlaceOption { Name = "Kecskemét" },
+    };
+
+    public class PlaceOption
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+
 
     private UserDetailFormModel _formModel = new();
 

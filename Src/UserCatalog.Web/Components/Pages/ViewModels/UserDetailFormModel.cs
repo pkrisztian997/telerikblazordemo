@@ -15,7 +15,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels
         [Required]
         public string LastName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Date of Birth is required.")]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
