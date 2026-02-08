@@ -1,0 +1,145 @@
+﻿@page "/userdetail/{UserId:guid}"
+@using System.ComponentModel.DataAnnotations
+@using UserCatalog.Web.Components.Pages.ViewModels
+@using UserCatalog.Web.Components.Pages.ViewModels.Converters
+@inject HttpClient Http
+@inject IUserProxyConverter UserProxyConverter
+@inject NavigationManager Nav
+
+<PageTitle>User Detail</PageTitle>
+
+<EditForm Model="_formModel" OnValidSubmit="OnValidSubmitHandler">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Username</label>
+        <TelerikTextBox @bind-Value="_formModel.Username" />
+    </div>
+
+    <div class="mb-2">
+        <label>First Name</label>
+        <TelerikTextBox @bind-Value="_formModel.FirstName" />
+    </div>
+
+    <div class="mb-2">
+        <label>Last Name</label>
+        <TelerikTextBox @bind-Value="_formModel.LastName" />
+    </div>
+
+    <div class="mb-2">
+        <label>Date of Birth</label>
+        <TelerikDatePicker @bind-Value="_formModel.DateOfBirth"
+                           Format="yyyy-MM-dd"
+                           Max="@DateTime.UtcNow"
+                           Width="250px" />
+    </div>
+
+    <div class="mb-2">
+        <label>Birth Place</label>
+        <TelerikDropDownList @bind-Value="_formModel.BirthPlace"
+                             Data="@_places"
+                             TextField="Name"
+                             ValueField="Name"
+                             Width="250px" />
+        <ValidationMessage For="@(() => _formModel.BirthPlace)" />
+    </div>
+
+    <div class="mb-2">
+        <label>Residence</label>
+        <TelerikDropDownList @bind-Value="_formModel.Residence"
+                             Data="@_places"
+                             TextField="Name"
+                             ValueField="Name"
+                             Width="250px" />
+    </div>
+
+    <TelerikMaskedTextBox @bind-Value="_formModel.PhoneNumber"
+                          Mask="+00 00 000-0000"
+                          Placeholder="Enter phone number" />
+
+    <div class="mb-2">
+        <label>Current Password</label>
+        <TelerikTextBox Password="true"
+                        @bind-Value="_formModel.CurrentPassword" />
+        <ValidationMessage For="@(() => _formModel.CurrentPassword)" />
+    </div>
+
+    <div class="mb-2">
+        <label>New Password</label>
+        <TelerikTextBox Password="true"
+                        @bind-Value="_formModel.NewPassword" />
+        <ValidationMessage For="@(() => _formModel.NewPassword)" />
+    </div>
+
+    <div class="mb-2">
+        <label>New Password Again</label>
+        <TelerikTextBox Password="true"
+                        @bind-Value="_formModel.NewPasswordAgain" />
+        <ValidationMessage For="@(() => _formModel.NewPasswordAgain)" />
+    </div>
+
+    <TelerikButton ButtonType="ButtonType.Submit" Class="k-primary">
+        Save
+    </TelerikButton>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    private List<PlaceOption> _places = new()
+    {
+        new PlaceOption { Name = "Budapest" },
+        new PlaceOption { Name = "Debrecen" },
+        new PlaceOption { Name = "Szeged" },
+        new PlaceOption { Name = "Pécs" },
+        new PlaceOption { Name = "Győr" },
+        new PlaceOption { Name = "Eger" },
+        new PlaceOption { Name = "Veszprém" },
+        new PlaceOption { Name = "Székesfehérvár" },
+        new PlaceOption { Name = "Szentendre" },
+        new PlaceOption { Name = "Zalaegerszeg" },
+        new PlaceOption { Name = "Kecskemét" },
+    };
+
+    public class PlaceOption
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+
+
+    private UserDetailFormModel _formModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync($"/api/user/{UserId}");
+        if (!response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var user = (UserProxy)UserProxyConverter.ConvertUserToUserProxy(json);
+
+        _formModel.Id = user.Id;
+        _formModel.Username = user.Username;
+        _formModel.FirstName = user.FirstName;
+        _formModel.LastName = user.LastName;
+        _formModel.DateOfBirth = user.DateOfBirth;
+        _formModel.BirthPlace = user.BirthPlace;
+        _formModel.Residence = user.Residence;
+        _formModel.PhoneNumber = user.PhoneNumber;
+    }
+
+    private async Task OnValidSubmitHandler()
+    {
+        var response = await Http.PostAsJsonAsync($"/api/user/update", _formModel);
+        if (!response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        Nav.NavigateTo("/users");
+    }
+}
