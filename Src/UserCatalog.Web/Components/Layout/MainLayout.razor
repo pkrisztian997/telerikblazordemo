@@ -39,10 +39,6 @@
             <main>
                 @Body
             </main>
-            @if (DrawerExpanded)
-            {
-                <AICodingAssistant />
-            }
         </DrawerContent>
     </TelerikDrawer>
 
@@ -77,9 +73,7 @@
     private IEnumerable<NavItem> AuthenticatedDrawerData { get; set; } = new List<NavItem>()
     {
         new NavItem("Home", SvgIcon.Home, "/"),
-        new NavItem("Counter", SvgIcon.CustomFormat, "/counter"),
-        new NavItem("Weather", SvgIcon.Globe, "/weather"),
-        new NavItem("About", SvgIcon.InfoCircle, "/about"),
+        new NavItem("Users", SvgIcon.Table, "/users"),
         new NavItem("Log out", SvgIcon.Logout, "/logout")
     };
 
