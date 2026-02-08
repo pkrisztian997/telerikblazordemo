@@ -164,5 +164,110 @@ namespace SHD.UserCatalog.BL.DataAccess
             var allUsers = await GetAllUsersAsync();
             return allUsers.FirstOrDefault(u => u.Id == userId) ?? throw new InvalidOperationException($"User with id {userId} not found.");
         }
+
+        public async Task<IUser> UpdateUserAsync(IUser userToUpdate)
+        {
+            ArgumentNullException.ThrowIfNull(userToUpdate);
+
+            if (!File.Exists(_dataFilePath))
+            {
+                throw new InvalidOperationException("Data file does not exist.");
+            }
+
+            var lines = await File.ReadAllLinesAsync(_dataFilePath);
+            var updated = false;
+
+            var output = new List<string>(lines.Length)
+            {
+                HEADER_LINE
+            };
+
+            foreach (var line in lines.Skip(1))
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+
+                var parts = line.Split(';');
+                if (parts.Length < EXPECTED_NUMBER_OF_RECORDS)
+                {
+                    continue;
+                }
+
+                if (!Guid.TryParse(parts[0], out var id))
+                {
+                    continue;
+                }
+
+                if (id == userToUpdate.Id)
+                {
+                    output.Add(BuildLine(userToUpdate));
+                    updated = true;
+                }
+                else
+                {
+                    output.Add(line);
+                }
+            }
+
+            if (!updated)
+            {
+                throw new InvalidOperationException($"User with id {userToUpdate.Id} not found.");
+            }
+
+            var tempFile = Path.GetTempFileName();
+            await File.WriteAllLinesAsync(tempFile, output).ConfigureAwait(false);
+
+            File.Copy(tempFile, GetAbsolutePath(_dataFilePath), overwrite: true);
+            File.Delete(tempFile);
+
+            return userToUpdate;
+        }
+
+        public static string GetAbsolutePath(string relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath))
+                throw new ArgumentException("Path cannot be null or empty.", nameof(relativePath));
+
+            return Path.GetFullPath(relativePath);
+        }
+
+
+        private static string BuildLine(IUser user)
+        {
+            return string.Join(";",
+                user.Id,
+                user.Username,
+                ConvertToPlainText(user.Password),
+                user.LastName,
+                user.FirstName,
+                user.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                user.BirthPlace,
+                user.Residence
+            );
+        }
+
+        private static string ConvertToPlainText(SecureString secureString)
+        {
+            if (secureString == null)
+            {
+                return string.Empty;
+            }
+
+            IntPtr bstr = IntPtr.Zero;
+            try
+            {
+                bstr = Marshal.SecureStringToBSTR(secureString);
+                return Marshal.PtrToStringBSTR(bstr) ?? string.Empty;
+            }
+            finally
+            {
+                if (bstr != IntPtr.Zero)
+                {
+                    Marshal.ZeroFreeBSTR(bstr);
+                }
+            }
+        }
     }
 }

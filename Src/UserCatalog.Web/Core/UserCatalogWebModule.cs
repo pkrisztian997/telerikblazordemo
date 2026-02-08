@@ -12,6 +12,7 @@ namespace UserCatalog.Web.Core
             services.AddUserCatalogModule(dataFilePath);
 
             services.AddTransient<UserProxyConverter>();
+            services.AddTransient<IUserProxyConverter, UserProxyConverter>();
 
             return services;
         }

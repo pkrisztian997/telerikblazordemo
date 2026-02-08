@@ -15,12 +15,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\OrganizationalFramework.BL.Impl\OrganizationalFramework.BL.Impl.csproj" />
 	  <ProjectReference Include="..\OrganizationalFramework.BL\OrganizationalFramework.BL.csproj" />
 	  <ProjectReference Include="..\UserCatalog.BL\UserCatalog.BL.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Workflow\Commands\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -15,10 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Workflow\Commands\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\OrganizationalFramework.BL\OrganizationalFramework.BL.csproj" />
 	</ItemGroup>
 

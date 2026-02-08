@@ -1,5 +1,5 @@
-﻿Id;Username;Password;LastName;FirstName;DateOfBirth;BirthPlace;Residence
-3f5b1e3a-9f7a-4c9e-b5a1-01c2d3e4f001;jkovacs;P@ssw0rd1;Kovács;János;1988-03-12;Budapest;Budapest
+Id;Username;Password;LastName;FirstName;DateOfBirth;BirthPlace;Residence
+3f5b1e3a-9f7a-4c9e-b5a1-01c2d3e4f001;jkovacs;12345678;Kovács;János;1988-03-12;UNIVERZUM2222;Budapest
 9a2c7b14-4d8e-42d3-9f31-01c2d3e4f002;anagy;P@ssw0rd2;Nagy;Anna;1992-07-25;Szeged;Szeged
 c41d9f02-7a3b-4a2d-8c11-01c2d3e4f003;bpeter;P@ssw0rd3;Balogh;Péter;1985-11-03;Debrecen;Debrecen
 e72a8c5d-1f9a-4f03-9a21-01c2d3e4f004;kszilvia;P@ssw0rd4;Kiss;Szilvia;1990-01-18;Miskolc;Budapest

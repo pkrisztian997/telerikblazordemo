@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SHD.UserCatalog.BL.DataAccess;
+using SHD.UserCatalog.BL.Workflow.Commands;
 using SHD.UserCatalog.BL.Workflow.Queries;
 
 namespace SHD.UserCatalog.BL.Core
@@ -20,7 +21,7 @@ namespace SHD.UserCatalog.BL.Core
 
         private static void AddCommands(IServiceCollection services)
         {
-
+            services.AddTransient<IUpdateUserCommand, UpdateUserCommand>();
         }
 
         private static void AddQueries(IServiceCollection services)

@@ -3,7 +3,8 @@
 @using UserCatalog.Web.Components.Pages.ViewModels
 @using UserCatalog.Web.Components.Pages.ViewModels.Converters
 @inject HttpClient Http
-@inject UserProxyConverter UserProxyConverter
+@inject IUserProxyConverter UserProxyConverter
+@inject NavigationManager Nav
 
 <PageTitle>User Detail</PageTitle>
 
@@ -101,5 +102,7 @@
         {
             return;
         }
+
+        Nav.NavigateTo("/users");
     }
 }

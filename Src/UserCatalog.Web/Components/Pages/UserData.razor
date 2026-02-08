@@ -79,16 +79,16 @@
     private void ExportToXml()
     {
         var proxyList = _selectedUsers.Select(u => new UserProxy
-        {
-            Id = u.Id,
-            Username = u.Username,
-            FirstName = u.FirstName,
-            LastName = u.LastName,
-            DateOfBirth = u.DateOfBirth,
-            BirthPlace = u.BirthPlace,
-            Residence = u.Residence,
-            Password = u.Password
-        }).ToList();
+        (
+            u.Id,
+            u.Username,
+            u.FirstName,
+            u.LastName,
+            u.DateOfBirth,
+            u.BirthPlace,
+            u.Residence,
+            u.Password
+        )).ToList();
 
         var serializer = new XmlSerializer(typeof(List<UserProxy>));
         using var sw = new StringWriter();

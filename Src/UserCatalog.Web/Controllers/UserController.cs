@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SHD.UserCatalog.BL;
+using SHD.UserCatalog.BL.Workflow.Commands;
 using SHD.UserCatalog.BL.Workflow.Queries;
 using System.Security.Claims;
 using UserCatalog.Web.Components.Pages.ViewModels;
+using UserCatalog.Web.Components.Pages.ViewModels.Converters;
 
 namespace UserCatalog.Web.Controllers
 {
@@ -12,21 +14,27 @@ namespace UserCatalog.Web.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IGetAllUsersQuery _getAllUsersQuery;
         private readonly IGetAuthenticatedUserQuery _getAuthenticatedUserQuery;
         private readonly IGetUserDetailsQuery _getUserDetailsQuery;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUpdateUserCommand _updateUserCommand;
+        private readonly IUserProxyConverter _userProxyConverter;
 
         public UserController(
+            IHttpContextAccessor httpContextAccessor,
             IGetAllUsersQuery getAllUsersQuery,
             IGetAuthenticatedUserQuery getAuthenticatedUserQuery,
             IGetUserDetailsQuery getUserDetailsQuery,
-            IHttpContextAccessor httpContextAccessor)
+            IUpdateUserCommand updateUserCommand,
+            IUserProxyConverter userProxyConverter)
         {
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
             _getAllUsersQuery = getAllUsersQuery ?? throw new ArgumentNullException(nameof(getAllUsersQuery));
             _getAuthenticatedUserQuery = getAuthenticatedUserQuery;
             _getUserDetailsQuery = getUserDetailsQuery ?? throw new ArgumentNullException(nameof(getUserDetailsQuery));
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _updateUserCommand = updateUserCommand ?? throw new ArgumentNullException(nameof(updateUserCommand));
+            _userProxyConverter = userProxyConverter ?? throw new ArgumentNullException(nameof(userProxyConverter));
         }
 
         [HttpGet]
@@ -44,7 +52,16 @@ namespace UserCatalog.Web.Controllers
         [HttpPost("update")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDetailFormModel userDetailFormModel)
         {
-            
+            var authenticatedUser = _getAuthenticatedUserQuery.GetAuthenticatedUserAsync(userDetailFormModel.Username, userDetailFormModel.CurrentPassword);
+            if (authenticatedUser == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            var user = _userProxyConverter.ConvertUserDetailFormModelToDomainModel(userDetailFormModel);
+            _updateUserCommand.AddUserCommandItem(user);
+            await _updateUserCommand.ExecuteAsync();
+
             return Ok();
         }
 

@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace UserCatalog.Web.Components.Pages.ViewModels.Converters
 {
-    public class UserProxyConverter
+    public class UserProxyConverter : IUserProxyConverter
     {
         public IEnumerable<IUser> ConvertUserListToUserProxy(string json)
         {
@@ -24,17 +24,31 @@ namespace UserCatalog.Web.Components.Pages.ViewModels.Converters
             using var doc = JsonDocument.Parse(json);
             var element = doc.RootElement;
 
-            var user = new UserProxy()
-            {
-                Id = element.GetProperty("id").GetGuid(),
-                Username = element.GetProperty("username").GetString()!,
-                FirstName = element.GetProperty("firstName").GetString()!,
-                LastName = element.GetProperty("lastName").GetString()!,
-                DateOfBirth = element.GetProperty("dateOfBirth").GetDateTime(),
-                BirthPlace = element.GetProperty("birthPlace").GetString()!,
-                Residence = element.GetProperty("residence").GetString()!,
-                Password = new SecureString()
-            };
+            var user = new UserProxy(
+                element.GetProperty("id").GetGuid(),
+                element.GetProperty("username").GetString()!,
+                element.GetProperty("firstName").GetString()!,
+                element.GetProperty("lastName").GetString()!,
+                element.GetProperty("dateOfBirth").GetDateTime(),
+                element.GetProperty("birthPlace").GetString()!,
+                element.GetProperty("residence").GetString()!,
+                new SecureString());
+
+            return user;
+        }
+
+        public IUser ConvertUserDetailFormModelToDomainModel(UserDetailFormModel userDetailFormModel)
+        {
+            var user = new UserProxy(
+                userDetailFormModel.Id,
+                userDetailFormModel.Username,
+                userDetailFormModel.FirstName,
+                userDetailFormModel.LastName,
+                userDetailFormModel.DateOfBirth,
+                userDetailFormModel.BirthPlace,
+                userDetailFormModel.Residence,
+                userDetailFormModel.NewPassword
+                );
 
             return user;
         }
