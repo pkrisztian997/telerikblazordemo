@@ -1,8 +1,8 @@
 ﻿@inherits LayoutComponentBase
-
-@implements IDisposable
-
+@inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
+@using Microsoft.AspNetCore.Components.Authorization
+@implements IDisposable
 
 <TelerikRootComponent>
 
@@ -66,12 +66,20 @@
 </div>
 
 @code {
-    private IEnumerable<NavItem> DrawerData { get; set; } = new List<NavItem>()
+    private IEnumerable<NavItem> DrawerData { get; set; } = new List<NavItem>();
+
+    private IEnumerable<NavItem> AnonymousDrawerData { get; set; } = new List<NavItem>()
+    {
+        new NavItem("Log in", SvgIcon.Login, "/login"),
+    };
+
+    private IEnumerable<NavItem> AuthenticatedDrawerData { get; set; } = new List<NavItem>()
     {
         new NavItem("Home", SvgIcon.Home, "/"),
         new NavItem("Counter", SvgIcon.CustomFormat, "/counter"),
         new NavItem("Weather", SvgIcon.Globe, "/weather"),
-        new NavItem("About", SvgIcon.InfoCircle, "/about")
+        new NavItem("About", SvgIcon.InfoCircle, "/about"),
+        new NavItem("Log out", SvgIcon.Logout, "/logout")
     };
 
     private bool DrawerExpanded { get; set; } = true;
@@ -93,10 +101,21 @@
         }
     }
 
-    private void SelectDrawerItem()
+    private async void SelectDrawerItem()
     {
-        var url = NavManager.Uri.Replace(NavManager.BaseUri, "/").ToLowerInvariant();
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
 
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            DrawerData = AuthenticatedDrawerData;
+        }
+        else
+        {
+            DrawerData = AnonymousDrawerData;
+        }
+
+        var url = NavManager.Uri.Replace(NavManager.BaseUri, "/").ToLowerInvariant();
         DrawerSelectedItem = DrawerData.FirstOrDefault(x => x.Url.ToLowerInvariant() == url);
     }
 

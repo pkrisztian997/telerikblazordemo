@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Mvc
 @using Telerik.Blazor.Components
+@inject NavigationManager Nav
 @inject IJSRuntime JS
 
 <PageTitle>Login</PageTitle>
@@ -57,7 +58,7 @@
         {
             var dto = new { Username = _model.Username, Password = _model.Password };
             var result = await module.InvokeAsync<string>("postJson", "/api/user/login", dto);
-            // TODO: handle result (e.g. navigate on success)
+            Nav.NavigateTo("/", forceLoad: true);
         }
         finally
         {

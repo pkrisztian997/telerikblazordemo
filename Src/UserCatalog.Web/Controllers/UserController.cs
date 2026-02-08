@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SHD.UserCatalog.BL;
 using SHD.UserCatalog.BL.Workflow.Queries;
@@ -48,6 +47,13 @@ namespace UserCatalog.Web.Controllers
             await httpContext.SignInAsync("cookie", user);
 
             return "ok";
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("cookie");
+            return Ok();
         }
 
         public sealed class LoginRequest
