@@ -9,11 +9,15 @@
 
 <PageTitle>Users</PageTitle>
 
-<input placeholder="Search..." @bind="_searchTerm" @bind:event="oninput" />
+@* <input placeholder="Search..." @bind="_searchTerm" @bind:event="oninput" /> *@
 
 <TelerikGrid Data="@_filteredUsers" Height="500px"
-             Pageable="true" Sortable="true" FilterMode="Telerik.Blazor.GridFilterMode.FilterMenu"
-             SelectedItems="@_selectedUsers" SelectionMode="GridSelectionMode.Multiple">
+             Pageable="true"
+             Sortable="true"
+             FilterMode="Telerik.Blazor.GridFilterMode.FilterMenu"
+             SelectedItems="@_selectedUsers"
+             SelectionMode="GridSelectionMode.Multiple"
+             SelectedItemsChanged="@((IEnumerable<IUser> newSelected) => OnRowSelect(newSelected))">
     <GridColumns>
         <GridColumn Field="Username" Title="Username" />
         <GridColumn Field="FirstName" Title="Firstname" />
@@ -49,7 +53,7 @@
             .ToList();
 
     private string _searchTerm = string.Empty;
-    private List<IUser> _selectedUsers = new();
+    private IEnumerable<IUser> _selectedUsers = new List<IUser>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,6 +89,11 @@
         }
 
         return list;
+    }
+
+    private void OnRowSelect(IEnumerable<IUser> users)
+    {
+        _selectedUsers = users;
     }
 
     private void ExportToXml()
