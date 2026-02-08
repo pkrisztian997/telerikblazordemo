@@ -48,7 +48,7 @@ namespace UserCatalog.Web.Components.Pages.ViewModels.Converters
                 userDetailFormModel.DateOfBirth,
                 userDetailFormModel.BirthPlace,
                 userDetailFormModel.Residence,
-                $"+{userDetailFormModel.PhoneNumber}",
+                userDetailFormModel.PhoneNumber.StartsWith("+") ? userDetailFormModel.PhoneNumber : $"+{userDetailFormModel.PhoneNumber}",
                 userDetailFormModel.NewPassword
                 );
 
