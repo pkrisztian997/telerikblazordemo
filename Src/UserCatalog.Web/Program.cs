@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-using SoftwareHouseDemo.Components;
+using UserCatalog.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 AddTelerikBlazor(builder);
@@ -53,4 +53,3 @@ static void SetUpComponents(WebApplication app)
     app.MapRazorComponents<App>()
         .AddInteractiveServerRenderMode();
 }
-

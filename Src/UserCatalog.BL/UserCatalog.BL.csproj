@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>SHD.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>SHD.UserCatalog.BL</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Remove="System.Net.Http" />
+		<Using Remove="System.Threading" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>..\..\Binaries\Debug</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>..\..\Binaries\Release</OutputPath>
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
+</Project>

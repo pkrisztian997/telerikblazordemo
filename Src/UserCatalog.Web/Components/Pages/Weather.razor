@@ -1,6 +1,4 @@
 ﻿@page "/weather"
-@using SoftwareHouseDemo.Controllers
-@inject HttpClient Http
 
 <PageTitle>Telerik Blazor App | Weather</PageTitle>
 
@@ -17,30 +15,15 @@ else
                  FilterMode="@GridFilterMode.FilterRow"
                  Pageable="true">
         <GridColumns>
-            <GridColumn Field="@nameof(WeatherDto.Date)" DisplayFormat="{0:d}" />
-            <GridColumn Field="@nameof(WeatherDto.TemperatureC)" Title="Temp. (C)" />
-            <GridColumn Field="@nameof(WeatherDto.TemperatureF)" Title="Temp. (F)" />
-            <GridColumn Field="@nameof(WeatherDto.Summary)" />
-            @* <GridColumn Field="@nameof(WeatherForecast.Date)" DisplayFormat="{0:d}" />
+            <GridColumn Field="@nameof(WeatherForecast.Date)" DisplayFormat="{0:d}" />
             <GridColumn Field="@nameof(WeatherForecast.TemperatureC)" Title="Temp. (C)" />
             <GridColumn Field="@nameof(WeatherForecast.TemperatureF)" Title="Temp. (F)" />
-            <GridColumn Field="@nameof(WeatherForecast.Summary)" /> *@
+            <GridColumn Field="@nameof(WeatherForecast.Summary)" />
         </GridColumns>
     </TelerikGrid>
 }
 
 @code {
-    private WeatherDto[]? Forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Simulate asynchronous loading to demonstrate a loading indicator
-        await Task.Delay(500);
-
-        Forecasts = await Http.GetFromJsonAsync<WeatherDto[]>("api/weather");
-    }
-
-    /*
     private WeatherForecast[]? Forecasts { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -64,5 +47,5 @@ else
         public int TemperatureC { get; set; }
         public string? Summary { get; set; }
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }*/
+    }
 }
