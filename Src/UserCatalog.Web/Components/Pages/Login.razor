@@ -1,7 +1,11 @@
 ﻿@page "/login"
+@attribute [AllowAnonymous]
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Mvc
 @using Telerik.Blazor.Components
+@inject IJSRuntime JS
 
 <PageTitle>Login</PageTitle>
 
@@ -12,7 +16,7 @@
         </CardHeader>
         <CardBody>
             <div style="padding:1.25rem;">
-                <EditForm EditContext="@_editContext" OnValidSubmit="HandleValidSubmit">
+                <EditForm EditContext="@_editContext" OnValidSubmit="HandleValidSubmitAsync">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
 
@@ -46,10 +50,22 @@
         _editContext = new EditContext(_model);
     }
 
-    private Task HandleValidSubmit()
+    private async Task HandleValidSubmitAsync()
     {
-        // TODO: perform login using injected services
-        return Task.CompletedTask;
+        var module = await JS.InvokeAsync<IJSObjectReference>("import", "/js/loginClient.js");
+        try
+        {
+            var dto = new { Username = _model.Username, Password = _model.Password };
+            var result = await module.InvokeAsync<string>("postJson", "/api/user/login", dto);
+            // TODO: handle result (e.g. navigate on success)
+        }
+        finally
+        {
+            if (module is not null)
+            {
+                await module.DisposeAsync();
+            }
+        }
     }
 
     private sealed class LoginModel
